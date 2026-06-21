@@ -1,0 +1,110 @@
+[
+  {
+    "id": "TC01",
+    "category": "happy_path",
+    "input": "Do you have brake pads for Bajaj Pulsar 150?",
+    "expected_tool": "find_parts_by_vehicle",
+    "expected_keywords": ["brake", "pulsar", "INR", "stock"],
+    "should_decline": false,
+    "description": "Basic vehicle parts lookup"
+  },
+  {
+    "id": "TC02",
+    "category": "happy_path",
+    "input": "Check stock for TYR-1009",
+    "expected_tool": "check_stock",
+    "expected_keywords": ["TYR-1009", "stock", "units"],
+    "should_decline": false,
+    "description": "Stock check by SKU"
+  },
+  {
+    "id": "TC03",
+    "category": "happy_path",
+    "input": "Place an order for 3 units of TYR-1009 for Singh Motors",
+    "expected_tool": "create_order",
+    "expected_keywords": ["order", "INR", "ORD-"],
+    "should_decline": false,
+    "description": "Order placement with dealer name"
+  },
+  {
+    "id": "TC04",
+    "category": "happy_path",
+    "input": "What is the cheapest chain lube you have?",
+    "expected_tool": null,
+    "expected_keywords": ["INR", "stock"],
+    "should_decline": false,
+    "description": "Cheapest product query"
+  },
+  {
+    "id": "TC05",
+    "category": "clarification",
+    "input": "I need brake pads",
+    "expected_tool": null,
+    "expected_keywords": ["which", "vehicle", "?"],
+    "should_decline": false,
+    "description": "Vague request should trigger clarifying question"
+  },
+  {
+    "id": "TC06",
+    "category": "clarification",
+    "input": "I need tyres",
+    "expected_tool": null,
+    "expected_keywords": ["which", "vehicle", "?"],
+    "should_decline": false,
+    "description": "Vague tyre request needs vehicle info"
+  },
+  {
+    "id": "TC07",
+    "category": "out_of_scope",
+    "input": "What is the weather today?",
+    "expected_tool": null,
+    "expected_keywords": ["only", "parts", "orders"],
+    "should_decline": true,
+    "description": "Off-topic question should be declined"
+  },
+  {
+    "id": "TC08",
+    "category": "out_of_scope",
+    "input": "Who won the IPL this year?",
+    "expected_tool": null,
+    "expected_keywords": ["only", "parts", "orders"],
+    "should_decline": true,
+    "description": "Completely off-topic should be declined"
+  },
+  {
+    "id": "TC09",
+    "category": "out_of_scope",
+    "input": "Can you write me a poem?",
+    "expected_tool": null,
+    "expected_keywords": ["only", "parts", "orders"],
+    "should_decline": true,
+    "description": "Creative request should be declined"
+  },
+  {
+    "id": "TC10",
+    "category": "tricky",
+    "input": "Find filters for Honda Unicorn",
+    "expected_tool": "find_parts_by_vehicle",
+    "expected_keywords": ["filter", "Honda Unicorn", "INR"],
+    "should_decline": false,
+    "description": "Vehicle + category combined query"
+  },
+  {
+    "id": "TC11",
+    "category": "tricky",
+    "input": "Is SKU BRK-9999 available?",
+    "expected_tool": "check_stock",
+    "expected_keywords": ["BRK-9999", "not"],
+    "should_decline": false,
+    "description": "Stock check for non-existent SKU"
+  },
+  {
+    "id": "TC12",
+    "category": "tricky",
+    "input": "Order 500 units of TYR-1009 for Mega Motors",
+    "expected_tool": "create_order",
+   "expected_keywords": ["324", "units"],
+    "should_decline": false,
+    "description": "Order quantity exceeds stock should warn dealer"
+  }
+]

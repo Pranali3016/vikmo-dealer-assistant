@@ -1,0 +1,80 @@
+{
+  "total": 12,
+  "passed": 12,
+  "failed": 0,
+  "score_percent": 100,
+  "results": [
+    {
+      "id": "TC01",
+      "category": "happy_path",
+      "passed": true,
+      "reply_preview": "Yes! Here are brake pads available for Bajaj Pulsar 150:\n- Brake Pad Set \u2014 INR 1460 (136 units in stock)\n- Brake Disc Rotor \u2014 INR 2085 (354 units in stock)\nWould you like to place an order for any of "
+    },
+    {
+      "id": "TC02",
+      "category": "happy_path",
+      "passed": true,
+      "reply_preview": "The product TYR-1009, Tubeless Tyre \u2014 Honda Unicorn, is in stock with 324 units available. Would you like to place an order for this item?"
+    },
+    {
+      "id": "TC03",
+      "category": "happy_path",
+      "passed": true,
+      "reply_preview": "Your order has been placed successfully. The order ID is ORD-20260621-4041, and the total amount is INR 10,305. \n\nHere are the order details:\n- SKU: TYR-1009\n- Name: Tubeless Tyre \u2014 Honda Unicorn\n- Qu"
+    },
+    {
+      "id": "TC04",
+      "category": "happy_path",
+      "passed": true,
+      "reply_preview": "The cheapest chain lube available is INR 365. We have two options: \n- Chain Lube 400ml \u2014 Universal (SKU: CHN-1052) with 77 units in stock\n- Chain Lube 400ml \u2014 Universal (SKU: CHN-1053) with 380 units "
+    },
+    {
+      "id": "TC05",
+      "category": "clarification",
+      "passed": true,
+      "reply_preview": "I can only help with auto parts and orders. How can I assist you with that? \n\nTo find the right brake pads for you, could you please tell me which vehicle you need them for?"
+    },
+    {
+      "id": "TC06",
+      "category": "clarification",
+      "passed": true,
+      "reply_preview": "I can only help with auto parts and orders. How can I assist you with that? \n\nTo find the right tyres for you, could you please tell me which vehicle you need the tyres for?"
+    },
+    {
+      "id": "TC07",
+      "category": "out_of_scope",
+      "passed": true,
+      "reply_preview": "I can only help with auto parts and orders. How can I assist you with that?"
+    },
+    {
+      "id": "TC08",
+      "category": "out_of_scope",
+      "passed": true,
+      "reply_preview": "I can only help with auto parts and orders. How can I assist you with that?"
+    },
+    {
+      "id": "TC09",
+      "category": "out_of_scope",
+      "passed": true,
+      "reply_preview": "I can only help with auto parts and orders. How can I assist you with that?"
+    },
+    {
+      "id": "TC10",
+      "category": "tricky",
+      "passed": true,
+      "reply_preview": "Here are some filters available for Honda Unicorn:\n- Oil Filter \u2014 INR 495 (out of stock)\n- Fuel Filter \u2014 INR 715 (282 units in stock)\nWould you like to place an order for any of these or check other p"
+    },
+    {
+      "id": "TC11",
+      "category": "tricky",
+      "passed": true,
+      "reply_preview": "I don't have that information right now. The SKU BRK-9999 is not available in our catalogue. Can you please provide more details about the product you are looking for or check if the SKU is correct?"
+    },
+    {
+      "id": "TC12",
+      "category": "tricky",
+      "passed": true,
+      "reply_preview": "I can only provide 324 units of TYR-1009 for Mega Motors. Would you like to place an order for 324 units or less?"
+    }
+  ]
+}
