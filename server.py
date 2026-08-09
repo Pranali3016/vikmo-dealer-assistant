@@ -22,17 +22,19 @@ from assistant.tools import run_tool, check_stock, create_order, find_parts_by_v
 from assistant.prompts import SYSTEM_PROMPT
 from assistant.agent import TOOLS, setup_groq, setup_rag
 
-load_dotenv()
-
+import threading
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup initialization
+    # Quick tabular datasets load (takes < 0.05s)
     get_catalogue_df()
     get_sales_history_df()
     get_forecast_results_df()
-    init_ai_engine()
+    
+    # Run heavy AI & RAG embedding initialization in background
+    # This allows Uvicorn to bind the port in < 0.2s without timing out on cloud platforms
+    threading.Thread(target=init_ai_engine, daemon=True).start()
     yield
 
 app = FastAPI(
@@ -700,8 +702,9 @@ def serve_home():
 
 if __name__ == "__main__":
     import uvicorn
+    port = int(os.environ.get("PORT", 8000))
     print("\n" + "=" * 60)
     print("VIKMO Auto Parts B2B Platform & AI Copilot")
-    print("Running locally on: http://localhost:8000")
+    print(f"Running on: http://0.0.0.0:{port}")
     print("=" * 60 + "\n")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=port)
