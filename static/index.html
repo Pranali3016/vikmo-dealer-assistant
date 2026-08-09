@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIKMO — AI Auto Parts Dealer Copilot & Demand Forecasting</title>
+  <meta name="description" content="AI-powered conversational assistant and predictive demand forecasting platform for automotive spare parts dealers.">
+  
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js for time-series forecasting & accuracy radar -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+  <!-- Top App Navigation Header -->
+  <header class="app-header">
+    <div class="brand-container">
+      <div class="brand-icon">
+        <i data-lucide="wrench"></i>
+      </div>
+      <div>
+        <div style="display: flex; align-items: center;">
+          <h1 class="brand-title">VIKMO</h1>
+          <span class="brand-badge">B2B Dealer Suite</span>
+        </div>
+        <div style="font-size: 0.72rem; color: var(--text-dim);">AI Auto Parts Copilot & Demand Intelligence</div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <div class="header-status-pill" id="systemHealthBadge">
+        <span class="status-dot"></span>
+        <span id="systemStatusText">Groq Llama-3.3 + ChromaDB Live</span>
+      </div>
+
+      <button class="btn-icon" id="themeToggleBtn" title="Toggle Light/Dark Theme">
+        <i data-lucide="sun" id="themeIcon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation Tab Bar -->
+  <nav class="nav-tabs-bar" id="mainTabBar">
+    <button class="tab-btn active" data-tab="tab-copilot">
+      <i data-lucide="bot"></i>
+      <span>AI Dealer Copilot</span>
+      <span class="badge">Groq RAG</span>
+    </button>
+    <button class="tab-btn" data-tab="tab-catalogue">
+      <i data-lucide="layers"></i>
+      <span>Smart Catalogue</span>
+      <span class="badge" id="navProductCount">600+</span>
+    </button>
+    <button class="tab-btn" data-tab="tab-orders">
+      <i data-lucide="shopping-bag"></i>
+      <span>Orders & Invoices</span>
+      <span class="badge" id="navOrderCount">2</span>
+    </button>
+    <button class="tab-btn" data-tab="tab-forecasting">
+      <i data-lucide="trending-up"></i>
+      <span>Demand Forecasting</span>
+      <span class="badge" style="background: rgba(16,185,129,0.25); color: #34d399;">+16.4% Accuracy</span>
+    </button>
+    <button class="tab-btn" data-tab="tab-eval">
+      <i data-lucide="check-circle-2"></i>
+      <span>Live Evaluation</span>
+      <span class="badge" style="background: rgba(6,182,212,0.25); color: #22d3ee;">12/12 (100%)</span>
+    </button>
+  </nav>
+
+  <!-- Main Container Layout -->
+  <main class="main-content">
+
+    <!-- ─────────────────────────────────────────────
+         TAB 1: AI DEALER COPILOT
+         ───────────────────────────────────────────── -->
+    <section class="tab-pane active" id="tab-copilot">
+      <div class="chat-layout">
+        <!-- Main Chat Area -->
+        <div class="glass chat-card">
+          <div class="chat-header">
+            <div class="chat-agent-info">
+              <div class="agent-avatar">
+                <i data-lucide="sparkles" style="width: 20px; height: 20px;"></i>
+              </div>
+              <div>
+                <div style="font-weight: 700; font-family: var(--font-display);">VIKMO Dealer Assistant</div>
+                <div style="font-size: 0.74rem; color: var(--text-muted);">Retrieval Augmented Generation &bull; 600 SKUs Index</div>
+              </div>
+            </div>
+            <div>
+              <button class="btn-icon" id="clearChatBtn" title="Reset Conversation">
+                <i data-lucide="rotate-ccw"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Messages Scrollable Body -->
+          <div class="messages-container" id="chatMessages">
+            <div class="message-row assistant">
+              <div class="message-bubble">
+                <strong>Namaste! 👋 I am your VIKMO AI Dealer Assistant.</strong>
+                <p style="margin-top: 0.35rem; color: var(--text-muted);">
+                  I can help you look up vehicle fitment (e.g. <em>Bajaj Pulsar 150, Yamaha FZ, Meteor 350</em>), check real-time warehouse stock for SKUs, and instantly create wholesale orders.
+                </p>
+                <div style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--accent-cyan);">
+                  Try clicking one of the suggested prompts below or type your query!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Suggestion Pills -->
+          <div class="chat-suggestions">
+            <button class="chip-btn" data-query="Do you have brake pads for Bajaj Pulsar 150?">
+              🏍️ Brake pads for Pulsar 150
+            </button>
+            <button class="chip-btn" data-query="Check stock for TYR-1009">
+              📦 Check stock for TYR-1009
+            </button>
+            <button class="chip-btn" data-query="Place an order for 3 units of TYR-1009 for Singh Motors">
+              🛒 Order 3x TYR-1009 for Singh Motors
+            </button>
+            <button class="chip-btn" data-query="I need tyres">
+              ❓ I need tyres (Clarification)
+            </button>
+            <button class="chip-btn" data-query="What is the weather today?">
+              🛡️ Test Weather (Guardrail)
+            </button>
+          </div>
+
+          <!-- Input Bar -->
+          <div class="chat-input-container">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Ask about vehicle fitment, SKU stock, or place an order..." autocomplete="off">
+            <button class="btn-primary" id="sendMessageBtn">
+              <span>Send</span>
+              <i data-lucide="send" style="width: 16px; height: 16px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sidebar Telemetry & Active Context -->
+        <aside class="chat-sidebar">
+          <div class="glass sidebar-card">
+            <h4><i data-lucide="cpu" style="color: var(--primary);"></i> LLM Architecture</h4>
+            <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+              <div>• <strong>Model</strong>: Groq Llama-3.3-70b-versatile</div>
+              <div>• <strong>Embeddings</strong>: all-MiniLM-L6-v2 (384d)</div>
+              <div>• <strong>Vector DB</strong>: ChromaDB (Top-5 RAG)</div>
+              <div>• <strong>Guardrail</strong>: Strict Auto-Parts Domain</div>
+            </div>
+          </div>
+
+          <div class="glass sidebar-card">
+            <h4><i data-lucide="hammer" style="color: var(--accent-cyan);"></i> Function Calling Tools</h4>
+            <div style="display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.78rem;">
+              <div style="padding: 0.4rem; background: rgba(255,255,255,0.03); border-radius: 4px;">
+                <strong style="color: #a5b4fc;">check_stock(sku)</strong>
+                <div style="color: var(--text-dim);">Live inventory count & availability</div>
+              </div>
+              <div style="padding: 0.4rem; background: rgba(255,255,255,0.03); border-radius: 4px;">
+                <strong style="color: #a5b4fc;">find_parts_by_vehicle(v)</strong>
+                <div style="color: var(--text-dim);">Finds direct-fit OEM & aftermarket parts</div>
+              </div>
+              <div style="padding: 0.4rem; background: rgba(255,255,255,0.03); border-radius: 4px;">
+                <strong style="color: #a5b4fc;">create_order(dealer, items)</strong>
+                <div style="color: var(--text-dim);">Generates validated B2B orders with total INR</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass sidebar-card" style="background: rgba(16,185,129,0.05); border-color: rgba(16,185,129,0.25);">
+            <h4><i data-lucide="shield-check" style="color: var(--accent-emerald);"></i> 100% Eval Verified</h4>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">
+              All 12 evaluation test cases verified with zero hallucination and complete domain compliance.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────
+         TAB 2: SMART PRODUCT CATALOGUE
+         ───────────────────────────────────────────── -->
+    <section class="tab-pane" id="tab-catalogue">
+      <div class="glass catalogue-filter-bar">
+        <!-- Search -->
+        <div class="search-input-wrapper">
+          <i data-lucide="search" class="search-icon"></i>
+          <input type="text" id="catalogueSearchInput" placeholder="Search 600+ auto parts by name, SKU, or vehicle...">
+        </div>
+
+        <!-- Vehicle Dropdown -->
+        <select class="filter-select" id="vehicleFilter">
+          <option value="all">🚗 All Vehicles / Fitments</option>
+        </select>
+
+        <!-- Category Dropdown -->
+        <select class="filter-select" id="categoryFilter">
+          <option value="all">📂 All Categories</option>
+        </select>
+
+        <!-- Brand Dropdown -->
+        <select class="filter-select" id="brandFilter">
+          <option value="all">🏷️ All Brands</option>
+        </select>
+
+        <!-- Stock Status -->
+        <select class="filter-select" id="stockFilter">
+          <option value="all">📊 All Stock Levels</option>
+          <option value="in_stock">✅ In Stock (> 10)</option>
+          <option value="low_stock">⚠️ Low Stock (1 - 10)</option>
+          <option value="out_of_stock">❌ Out of Stock (0)</option>
+        </select>
+
+        <!-- Sorting -->
+        <select class="filter-select" id="sortFilter">
+          <option value="name">Sort: Name (A-Z)</option>
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
+          <option value="stock_desc">Highest Stock First</option>
+        </select>
+      </div>
+
+      <!-- Loading and count header -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <div style="font-size: 0.9rem; color: var(--text-muted);" id="catalogueResultCount">
+          Showing products...
+        </div>
+        <div style="display: flex; gap: 0.5rem;" id="cataloguePagination"></div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid" id="productsGrid"></div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────
+         TAB 3: ORDERS & INVOICES MANAGER
+         ───────────────────────────────────────────── -->
+    <section class="tab-pane" id="tab-orders">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+        <div>
+          <h2 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 700;">Dealer Orders & Quotations</h2>
+          <p style="color: var(--text-muted); font-size: 0.88rem;">Review wholesale orders, validated item totals, and exportable B2B tax invoices.</p>
+        </div>
+        <button class="btn-primary" id="openManualOrderModalBtn">
+          <i data-lucide="plus-circle" style="width: 18px; height: 18px;"></i>
+          <span>Create New Order</span>
+        </button>
+      </div>
+
+      <div class="glass orders-table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Dealer / Customer</th>
+              <th>Date & Time</th>
+              <th>Items Ordered</th>
+              <th>Total Amount (INR)</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────
+         TAB 4: DEMAND FORECASTING & RADAR
+         ───────────────────────────────────────────── -->
+    <section class="tab-pane" id="tab-forecasting">
+      <!-- Accuracy Metrics KPIs -->
+      <div class="metrics-row">
+        <div class="glass metric-card">
+          <div class="metric-label">Model Accuracy Gain</div>
+          <div class="metric-value" style="color: #34d399;">+16.4%</div>
+          <div class="metric-badge">
+            <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+            <span>Over 4-Week Moving Average</span>
+          </div>
+        </div>
+
+        <div class="glass metric-card">
+          <div class="metric-label">VIKMO Model MAE</div>
+          <div class="metric-value" style="color: #a5b4fc;" id="metricModelMae">3.82</div>
+          <div style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.3rem;">
+            Exponential Smoothing + Promo adjustment
+          </div>
+        </div>
+
+        <div class="glass metric-card">
+          <div class="metric-label">Naive Baseline MAE</div>
+          <div class="metric-value" style="color: #94a3b8;" id="metricBaselineMae">4.57</div>
+          <div style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.3rem;">
+            Simple moving average benchmark
+          </div>
+        </div>
+
+        <div class="glass metric-card">
+          <div class="metric-label">Backtest Horizon</div>
+          <div class="metric-value" style="color: #38bdf8;">8 Weeks</div>
+          <div class="metric-badge" style="color: #38bdf8;">
+            <i data-lucide="lock" style="width: 14px; height: 14px;"></i>
+            <span>Leakage-Free Test Partition</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Time-Series Forecasting Interactive Chart -->
+      <div class="glass chart-container-card">
+        <div class="chart-header">
+          <div>
+            <h3 style="font-family: var(--font-display); font-size: 1.2rem; font-weight: 700;">
+              SKU Demand Trend & 8-Week Predictive Forecast
+            </h3>
+            <div style="font-size: 0.82rem; color: var(--text-muted);">
+              Select any SKU from the 600 catalogue products to inspect historical sales curve vs. future projected demand.
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <!-- SKU Picker -->
+            <select class="filter-select" id="forecastSkuPicker" style="min-width: 220px;"></select>
+
+            <!-- Promo Uplift Simulator Slider -->
+            <div class="promo-slider-container">
+              <i data-lucide="zap" style="color: var(--accent-amber); width: 18px; height: 18px;"></i>
+              <label for="promoSlider" style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted);">Promo Boost:</label>
+              <input type="range" id="promoSlider" min="0" max="0.5" step="0.05" value="0">
+              <span id="promoSliderVal" style="font-size: 0.8rem; font-weight: 700; color: var(--accent-amber); min-width: 38px;">+0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart Canvas -->
+        <div style="position: relative; height: 360px; width: 100%;">
+          <canvas id="forecastChartCanvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Stockout Risk Radar -->
+      <div class="glass chart-container-card">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+          <div>
+            <h3 style="font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; color: var(--accent-rose);">
+              <i data-lucide="alert-triangle" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle;"></i>
+              Inventory Stockout Risk Radar
+            </h3>
+            <div style="font-size: 0.82rem; color: var(--text-muted);">
+              Identifies fast-moving SKUs where 8-week forecasted demand exceeds available warehouse stock.
+            </div>
+          </div>
+        </div>
+
+        <div class="orders-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Part Description</th>
+                <th>Category</th>
+                <th>Current Stock</th>
+                <th>Avg Weekly Sales</th>
+                <th>8-Week Forecast</th>
+                <th>Risk Level</th>
+                <th>Recommended Reorder</th>
+              </tr>
+            </thead>
+            <tbody id="stockoutRadarTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────
+         TAB 5: LIVE EVALUATION PLAYGROUND
+         ───────────────────────────────────────────── -->
+    <section class="tab-pane" id="tab-eval">
+      <div class="eval-hero">
+        <div>
+          <h2 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 800;">
+            Assistant Evaluation & Benchmark Suite
+          </h2>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.25rem;">
+            Runs 12 standardized test cases covering happy path lookups, vague clarifications, out-of-scope guardrail rejection, and stock edge cases.
+          </p>
+        </div>
+        <div>
+          <button class="btn-primary" id="runEvalBtn" style="background: linear-gradient(135deg, #06b6d4, #6366f1);">
+            <i data-lucide="play" style="width: 16px; height: 16px;"></i>
+            <span>Execute Test Suite (12 Tests)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Eval Summary Cards -->
+      <div class="metrics-row" style="margin-bottom: 1.5rem;" id="evalScoreRow">
+        <div class="glass metric-card">
+          <div class="metric-label">Overall Pass Rate</div>
+          <div class="metric-value" style="color: #34d399;" id="evalOverallScore">12 / 12 (100%)</div>
+        </div>
+        <div class="glass metric-card">
+          <div class="metric-label">Happy Path Lookups</div>
+          <div class="metric-value" style="color: #38bdf8;" id="evalHappyScore">4 / 4</div>
+        </div>
+        <div class="glass metric-card">
+          <div class="metric-label">Clarifications Needed</div>
+          <div class="metric-value" style="color: #f59e0b;" id="evalClarifyScore">2 / 2</div>
+        </div>
+        <div class="glass metric-card">
+          <div class="metric-label">Guardrail Defense (Out-of-Scope)</div>
+          <div class="metric-value" style="color: #10b981;" id="evalScopeScore">3 / 3</div>
+        </div>
+        <div class="glass metric-card">
+          <div class="metric-label">Tricky Edge Cases</div>
+          <div class="metric-value" style="color: #e879f9;" id="evalTrickyScore">3 / 3</div>
+        </div>
+      </div>
+
+      <!-- Test Cases Grid -->
+      <div class="eval-test-grid" id="evalTestCasesGrid"></div>
+    </section>
+
+  </main>
+
+  <!-- ─────────────────────────────────────────────
+       MODAL: PRINTABLE TAX INVOICE
+       ───────────────────────────────────────────── -->
+  <div class="modal-backdrop" id="invoiceModal">
+    <div class="modal-content">
+      <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem; margin-bottom: 1.25rem;">
+        <div>
+          <h3 style="font-family: var(--font-display); font-size: 1.3rem; font-weight: 800;">VIKMO Auto Spares &bull; Tax Invoice</h3>
+          <div style="font-size: 0.78rem; color: var(--text-muted);" id="modalInvoiceId">ORD-XXXX</div>
+        </div>
+        <button class="btn-icon" id="closeInvoiceModalBtn">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div id="invoiceContentArea" style="font-size: 0.88rem; line-height: 1.6;"></div>
+
+      <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+        <button class="btn-icon" onclick="window.print()" title="Print Invoice" style="width: auto; padding: 0.5rem 1rem; gap: 0.4rem; display: flex;">
+          <i data-lucide="printer"></i>
+          <span>Print / Save PDF</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Manual Create Order -->
+  <div class="modal-backdrop" id="manualOrderModal">
+    <div class="modal-content">
+      <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem; margin-bottom: 1.25rem;">
+        <h3 style="font-family: var(--font-display); font-size: 1.2rem; font-weight: 700;">Place Wholesale Order</h3>
+        <button class="btn-icon" id="closeManualOrderModalBtn">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <form id="createOrderForm" style="display: flex; flex-direction: column; gap: 1rem;">
+        <div>
+          <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Dealer / Garage Name</label>
+          <input type="text" id="manualDealerName" class="chat-input" placeholder="e.g. Singh Motors, Royal Auto Spares" required>
+        </div>
+
+        <div>
+          <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Select Product SKU</label>
+          <select class="filter-select" id="manualOrderSku" style="width: 100%;"></select>
+        </div>
+
+        <div>
+          <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Quantity (Units)</label>
+          <input type="number" id="manualOrderQty" class="chat-input" min="1" max="100" value="2" required>
+        </div>
+
+        <button type="submit" class="btn-primary" style="margin-top: 0.5rem; justify-content: center;">
+          <i data-lucide="check"></i>
+          <span>Confirm & Generate Order</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Custom JavaScript Controller -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

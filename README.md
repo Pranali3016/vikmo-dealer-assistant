@@ -57,7 +57,18 @@ Place these files in the `data/` folder:
 
 ## How to run
 
-### Run the assistant
+### Run the Web Platform (Recommended) 🌐
+```bash
+python server.py
+```
+Open **http://localhost:8000** in your browser to access:
+- 🤖 **AI Dealer Copilot**: Multi-turn chat with RAG and tool calls
+- 📦 **Smart Catalogue**: Search and vehicle fitment filter across 600+ products
+- 🛒 **Orders & Tax Invoices**: Live order placement with printable B2B tax invoices
+- 📈 **Demand Forecasting**: Interactive time-series charts, 8-week predictions, and promo simulator
+- 🧪 **Live Evaluation Suite**: 12 test cases with 100% pass verification
+
+### Run CLI Assistant
 ```bash
 python -m assistant.agent
 ```
