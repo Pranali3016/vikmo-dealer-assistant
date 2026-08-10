@@ -96,13 +96,9 @@ def setup_groq():
 
 
 def setup_rag():
-    if os.path.exists("chroma_store"):
-        print("Loading existing catalogue index...")
-        collection, embed_model = load_index()
-    else:
-        print("Building catalogue index for first time (1-2 min)...")
-        catalogue = load_catalogue()
-        collection, embed_model = build_index(catalogue)
+    print("Initializing catalogue index...")
+    catalogue = load_catalogue()
+    collection, embed_model = build_index(catalogue)
     return collection, embed_model
 
 

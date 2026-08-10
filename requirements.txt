@@ -1,8 +1,7 @@
 fastapi
 uvicorn
 groq
-chromadb
-sentence-transformers
+scikit-learn
 pandas
 numpy
 python-dotenv
