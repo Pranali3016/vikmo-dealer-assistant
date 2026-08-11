@@ -22,61 +22,60 @@
 </head>
 <body>
 
-  <!-- Top App Navigation Header -->
+  <!-- Clean Unified Responsive Navigation Header -->
   <header class="app-header">
-    <div class="brand-container">
-      <div class="brand-icon">
-        <i data-lucide="wrench"></i>
-      </div>
-      <div>
-        <div style="display: flex; align-items: center;">
-          <h1 class="brand-title">VIKMO</h1>
-          <span class="brand-badge">B2B Dealer Suite</span>
+    <div class="header-left">
+      <div class="brand-container">
+        <div class="brand-icon">
+          <i data-lucide="wrench"></i>
         </div>
-        <div style="font-size: 0.72rem; color: var(--text-dim);">AI Auto Parts Copilot & Demand Intelligence</div>
+        <div class="brand-info">
+          <div class="brand-title-wrap">
+            <span class="brand-title">VIKMO</span>
+            <span class="brand-badge">Auto Parts</span>
+          </div>
+          <span class="brand-tagline">B2B Dealer AI &amp; Analytics</span>
+        </div>
       </div>
     </div>
 
-    <div class="header-actions">
-      <div class="header-status-pill" id="systemHealthBadge">
+    <!-- Center Navigation Tabs -->
+    <nav class="nav-menu" id="navMenu">
+      <button class="tab-btn active" data-tab="tab-copilot">
+        <i data-lucide="bot"></i>
+        <span>AI Copilot</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-catalogue">
+        <i data-lucide="layers"></i>
+        <span>Catalogue</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-orders">
+        <i data-lucide="shopping-bag"></i>
+        <span>Orders</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-forecasting">
+        <i data-lucide="trending-up"></i>
+        <span>Forecasting</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-eval">
+        <i data-lucide="check-circle-2"></i>
+        <span>Evaluation</span>
+      </button>
+    </nav>
+
+    <!-- Right Header Actions -->
+    <div class="header-right">
+      <div class="header-status-pill" id="systemHealthBadge" title="AI & Vector Engine Online">
         <span class="status-dot"></span>
-        <span id="systemStatusText">Groq Llama-3.3 + ChromaDB Live</span>
+        <span id="systemStatusText">Live &bull; 600 SKUs</span>
       </div>
 
-      <button class="btn-icon" id="themeToggleBtn" title="Toggle Light/Dark Theme">
-        <i data-lucide="sun" id="themeIcon"></i>
+      <!-- Mobile Hamburger Toggle -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Navigation">
+        <i data-lucide="menu" id="mobileMenuIcon"></i>
       </button>
     </div>
   </header>
-
-  <!-- Navigation Tab Bar -->
-  <nav class="nav-tabs-bar" id="mainTabBar">
-    <button class="tab-btn active" data-tab="tab-copilot">
-      <i data-lucide="bot"></i>
-      <span>AI Dealer Copilot</span>
-      <span class="badge">Groq RAG</span>
-    </button>
-    <button class="tab-btn" data-tab="tab-catalogue">
-      <i data-lucide="layers"></i>
-      <span>Smart Catalogue</span>
-      <span class="badge" id="navProductCount">600+</span>
-    </button>
-    <button class="tab-btn" data-tab="tab-orders">
-      <i data-lucide="shopping-bag"></i>
-      <span>Orders & Invoices</span>
-      <span class="badge" id="navOrderCount">2</span>
-    </button>
-    <button class="tab-btn" data-tab="tab-forecasting">
-      <i data-lucide="trending-up"></i>
-      <span>Demand Forecasting</span>
-      <span class="badge" style="background: rgba(16,185,129,0.25); color: #34d399;">+16.4% Accuracy</span>
-    </button>
-    <button class="tab-btn" data-tab="tab-eval">
-      <i data-lucide="check-circle-2"></i>
-      <span>Live Evaluation</span>
-      <span class="badge" style="background: rgba(6,182,212,0.25); color: #22d3ee;">12/12 (100%)</span>
-    </button>
-  </nav>
 
   <!-- Main Container Layout -->
   <main class="main-content">

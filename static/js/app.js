@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     lucide.createIcons();
   }
 
-  initTheme();
+  initMobileMenu();
   initTabs();
   initChat();
   await loadSystemHealth();
@@ -23,29 +23,41 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // ─────────────────────────────────────────────
-// 1. THEME & TABS CONTROLLER
+// 1. MOBILE MENU & TABS CONTROLLER
 // ─────────────────────────────────────────────
-function initTheme() {
-  const themeToggleBtn = document.getElementById("themeToggleBtn");
-  const themeIcon = document.getElementById("themeIcon");
+function initMobileMenu() {
+  const menuBtn = document.getElementById("mobileMenuBtn");
+  const navMenu = document.getElementById("navMenu");
+  const menuIcon = document.getElementById("mobileMenuIcon");
 
-  themeToggleBtn.addEventListener("click", () => {
-    const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
-    const nextTheme = currentTheme === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", nextTheme);
-    themeIcon.setAttribute("data-lucide", nextTheme === "dark" ? "sun" : "moon");
-    lucide.createIcons();
+  if (menuBtn && navMenu) {
+    menuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = navMenu.classList.toggle("open");
+      if (menuIcon) {
+        menuIcon.setAttribute("data-lucide", isOpen ? "x" : "menu");
+        lucide.createIcons();
+      }
+    });
 
-    // Refresh chart theme if chart exists
-    if (forecastChartInstance) {
-      updateChartColors(nextTheme);
-    }
-  });
+    // Close mobile menu when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!navMenu.contains(e.target) && !menuBtn.contains(e.target) && navMenu.classList.contains("open")) {
+        navMenu.classList.remove("open");
+        if (menuIcon) {
+          menuIcon.setAttribute("data-lucide", "menu");
+          lucide.createIcons();
+        }
+      }
+    });
+  }
 }
 
 function initTabs() {
   const tabBtns = document.querySelectorAll(".tab-btn");
   const tabPanes = document.querySelectorAll(".tab-pane");
+  const navMenu = document.getElementById("navMenu");
+  const menuIcon = document.getElementById("mobileMenuIcon");
 
   tabBtns.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -58,6 +70,14 @@ function initTabs() {
       const targetPane = document.getElementById(targetTabId);
       if (targetPane) {
         targetPane.classList.add("active");
+      }
+
+      // Close mobile dropdown if open
+      if (navMenu && navMenu.classList.contains("open")) {
+        navMenu.classList.remove("open");
+        if (menuIcon) {
+          menuIcon.setAttribute("data-lucide", "menu");
+        }
       }
 
       // Re-trigger layout/icons
@@ -776,9 +796,8 @@ function renderForecastChart(data) {
     forecastChartInstance.destroy();
   }
 
-  const isLight = document.documentElement.getAttribute("data-theme") === "light";
-  const gridColor = isLight ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)";
-  const textColor = isLight ? "#475569" : "#94a3b8";
+  const gridColor = "rgba(255,255,255,0.06)";
+  const textColor = "#94a3b8";
 
   forecastChartInstance = new Chart(ctx, {
     type: 'line',
@@ -858,20 +877,6 @@ function renderForecastChart(data) {
       }
     }
   });
-}
-
-function updateChartColors(theme) {
-  if (!forecastChartInstance) return;
-  const isLight = theme === "light";
-  const gridColor = isLight ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)";
-  const textColor = isLight ? "#475569" : "#94a3b8";
-
-  forecastChartInstance.options.scales.x.grid.color = gridColor;
-  forecastChartInstance.options.scales.y.grid.color = gridColor;
-  forecastChartInstance.options.scales.x.ticks.color = textColor;
-  forecastChartInstance.options.scales.y.ticks.color = textColor;
-  forecastChartInstance.options.plugins.legend.labels.color = textColor;
-  forecastChartInstance.update();
 }
 
 function renderStockoutRadarTable(risks) {

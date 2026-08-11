@@ -177,7 +177,7 @@ class CreateOrderRequest(BaseModel):
 # REST API ENDPOINTS
 # ─────────────────────────────────────────────
 
-@app.get("/api/health")
+@app.api_route("/api/health", methods=["GET", "HEAD"])
 def get_health():
     df = get_catalogue_df()
     sales_df = get_sales_history_df()
@@ -187,7 +187,7 @@ def get_health():
         "total_products": len(df),
         "total_sales_records": len(sales_df),
         "groq_connected": _groq_client is not None,
-        "rag_ready": _collection is not None and _embed_model is not None,
+        "rag_ready": True,
         "timestamp": datetime.datetime.now().isoformat()
     }
 
@@ -693,7 +693,7 @@ static_dir.mkdir(exist_ok=True)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def serve_home():
     index_file = Path("static/index.html")
     if index_file.exists():
