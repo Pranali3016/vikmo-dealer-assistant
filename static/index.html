@@ -22,7 +22,7 @@
 </head>
 <body>
 
-  <!-- Clean Unified Responsive Navigation Header -->
+  <!-- Clean Unified Top App Header -->
   <header class="app-header">
     <div class="header-left">
       <div class="brand-container">
@@ -39,8 +39,8 @@
       </div>
     </div>
 
-    <!-- Center Navigation Tabs -->
-    <nav class="nav-menu" id="navMenu">
+    <!-- Center Navigation Tabs (Desktop Floating Pill Bar) -->
+    <nav class="desktop-nav" id="desktopNav">
       <button class="tab-btn active" data-tab="tab-copilot">
         <i data-lucide="bot"></i>
         <span>AI Copilot</span>
@@ -63,17 +63,12 @@
       </button>
     </nav>
 
-    <!-- Right Header Actions -->
+    <!-- Right Header Live Status -->
     <div class="header-right">
       <div class="header-status-pill" id="systemHealthBadge" title="AI & Vector Engine Online">
         <span class="status-dot"></span>
         <span id="systemStatusText">Live &bull; 600 SKUs</span>
       </div>
-
-      <!-- Mobile Hamburger Toggle -->
-      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Navigation">
-        <i data-lucide="menu" id="mobileMenuIcon"></i>
-      </button>
     </div>
   </header>
 
@@ -493,6 +488,40 @@
       </form>
     </div>
   </div>
+
+  <!-- Native App Style Floating Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Mobile Navigation">
+    <button class="mobile-tab-btn active" data-tab="tab-copilot" aria-label="AI Copilot">
+      <div class="tab-icon-wrap">
+        <i data-lucide="bot"></i>
+      </div>
+      <span>Copilot</span>
+    </button>
+    <button class="mobile-tab-btn" data-tab="tab-catalogue" aria-label="Smart Catalogue">
+      <div class="tab-icon-wrap">
+        <i data-lucide="layers"></i>
+      </div>
+      <span>Catalogue</span>
+    </button>
+    <button class="mobile-tab-btn" data-tab="tab-orders" aria-label="Orders and Invoices">
+      <div class="tab-icon-wrap">
+        <i data-lucide="shopping-bag"></i>
+      </div>
+      <span>Orders</span>
+    </button>
+    <button class="mobile-tab-btn" data-tab="tab-forecasting" aria-label="Demand Forecasting">
+      <div class="tab-icon-wrap">
+        <i data-lucide="trending-up"></i>
+      </div>
+      <span>Forecast</span>
+    </button>
+    <button class="mobile-tab-btn" data-tab="tab-eval" aria-label="Live Evaluation">
+      <div class="tab-icon-wrap">
+        <i data-lucide="check-circle-2"></i>
+      </div>
+      <span>Eval</span>
+    </button>
+  </nav>
 
   <!-- Custom JavaScript Controller -->
   <script src="/static/js/app.js"></script>

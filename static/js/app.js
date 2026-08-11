@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     lucide.createIcons();
   }
 
-  initMobileMenu();
   initTabs();
   initChat();
   await loadSystemHealth();
@@ -23,65 +22,43 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // ─────────────────────────────────────────────
-// 1. MOBILE MENU & TABS CONTROLLER
+// 1. TABS CONTROLLER (DESKTOP & MOBILE BOTTOM NAV)
 // ─────────────────────────────────────────────
-function initMobileMenu() {
-  const menuBtn = document.getElementById("mobileMenuBtn");
-  const navMenu = document.getElementById("navMenu");
-  const menuIcon = document.getElementById("mobileMenuIcon");
-
-  if (menuBtn && navMenu) {
-    menuBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const isOpen = navMenu.classList.toggle("open");
-      if (menuIcon) {
-        menuIcon.setAttribute("data-lucide", isOpen ? "x" : "menu");
-        lucide.createIcons();
-      }
-    });
-
-    // Close mobile menu when clicking outside
-    document.addEventListener("click", (e) => {
-      if (!navMenu.contains(e.target) && !menuBtn.contains(e.target) && navMenu.classList.contains("open")) {
-        navMenu.classList.remove("open");
-        if (menuIcon) {
-          menuIcon.setAttribute("data-lucide", "menu");
-          lucide.createIcons();
-        }
-      }
-    });
-  }
-}
 
 function initTabs() {
-  const tabBtns = document.querySelectorAll(".tab-btn");
+  const allTabBtns = document.querySelectorAll(".tab-btn, .mobile-tab-btn");
   const tabPanes = document.querySelectorAll(".tab-pane");
-  const navMenu = document.getElementById("navMenu");
-  const menuIcon = document.getElementById("mobileMenuIcon");
 
-  tabBtns.forEach(btn => {
+  allTabBtns.forEach(btn => {
     btn.addEventListener("click", () => {
       const targetTabId = btn.getAttribute("data-tab");
+      if (!targetTabId) return;
 
-      tabBtns.forEach(b => b.classList.remove("active"));
-      tabPanes.forEach(p => p.classList.remove("active"));
-
-      btn.classList.add("active");
-      const targetPane = document.getElementById(targetTabId);
-      if (targetPane) {
-        targetPane.classList.add("active");
-      }
-
-      // Close mobile dropdown if open
-      if (navMenu && navMenu.classList.contains("open")) {
-        navMenu.classList.remove("open");
-        if (menuIcon) {
-          menuIcon.setAttribute("data-lucide", "menu");
+      // Update active state across all desktop AND mobile tab buttons
+      allTabBtns.forEach(b => {
+        if (b.getAttribute("data-tab") === targetTabId) {
+          b.classList.add("active");
+        } else {
+          b.classList.remove("active");
         }
-      }
+      });
 
-      // Re-trigger layout/icons
-      lucide.createIcons();
+      // Switch active tab pane
+      tabPanes.forEach(pane => {
+        if (pane.id === targetTabId) {
+          pane.classList.add("active");
+        } else {
+          pane.classList.remove("active");
+        }
+      });
+
+      // Scroll to top smoothly on mobile view changes
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Re-trigger icon rendering
+      if (window.lucide) {
+        lucide.createIcons();
+      }
     });
   });
 }
